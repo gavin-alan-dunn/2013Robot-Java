@@ -3,12 +3,78 @@ package edu.wpi.first.wpilibj.robot;
 
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.DigitalIOButton;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Joystick;
 
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
+    //CREATE JOYSTICK PORTS
+    int Joystick1_Port = 1, Joystick2_Port = 2;
+    
+    /*
+    UPDATE THE PORTS PLZ
+    */
+    
+    
+    //CREATE AXIS PORTS
+    int LsY = 1, LsX = 2, RsY = 3, RsX = 4;
+    
+    //CREATE BUTTON PORTS
+    int BtnA = 1, BtnB = 2, BtnX = 3, BtnY = 4;
+    
+    //CREATE THE JOYSTICKS
+    Joystick gamepad1 = new Joystick(Joystick1_Port);
+    
+    Joystick gamepad2 = new Joystick(Joystick2_Port);
+    
+    
+    
+    /*
+    All the actual button and axis methods.
+    */
+    
+    //CREATE THE AXIS METHODS
+    public double get1LsY() {
+        return gamepad1.getRawAxis(LsY);
+    }
+    
+    public double get1LsX() {
+        return gamepad1.getRawAxis(LsX);
+    }
+    
+    public double get1RsY() {
+        return gamepad1.getRawAxis(RsY);
+    }
+    
+    public double get1RsX() {
+        return gamepad1.getRawAxis(RsX);
+    }
+    
+    public double get2LsY() {
+        return gamepad2.getRawAxis(LsY);
+    }
+    
+    public double get2LsX() {
+        return gamepad2.getRawAxis(LsX);
+    }
+    
+    public double get2RsY() {
+        return gamepad2.getRawAxis(RsY);
+    }
+    
+    public double get2RsX() {
+        return gamepad2.getRawAxis(RsX);
+    }
+    
+    //CREATE THE BUTTON OBJECTS AND TRIGGERS
+    
+    
+    //CREATE METHODS TO OUTPUT DATA TO DASHBOARD.
+    
+    //Create the joysticks
     //// CREATING BUTTONS
     // One type of button is a joystick button which is any button on a joystick.
     // You create one by telling it which joystick it's on and which button
