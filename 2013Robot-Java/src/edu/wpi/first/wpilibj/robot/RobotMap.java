@@ -7,6 +7,18 @@ package edu.wpi.first.wpilibj.robot;
  * floating around.
  */
 public class RobotMap {
+    
+    //ALL THE JAGUAR PORTS
+    public static final int JaguarRightFront = 1;
+    public static final int JaguarRightBack = 2;
+    
+    public static final int JaguarLeftFront = 3;
+    public static final int JaguarLeftBack = 4;
+    
+    //TALON PORTS
+    public static final int ShooterWheel = 10;
+    
+    
     // For example to map the left and right motors, you could define the
     // following variables to use with your drivetrain subsystem.
     // public static final int leftMotor = 1;

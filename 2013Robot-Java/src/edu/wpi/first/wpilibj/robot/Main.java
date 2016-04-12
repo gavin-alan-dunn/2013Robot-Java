@@ -12,8 +12,11 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.robot.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj.robot.commands.CommandBase;
 import edu.wpi.first.wpilibj.robot.commands.ExampleCommand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.robot.subsystems.frisbeeShooter;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -25,7 +28,11 @@ import edu.wpi.first.wpilibj.robot.commands.ExampleCommand;
 public class Main extends IterativeRobot {
 
     Command autonomousCommand;
-
+    double deadZone;
+    OI oi = new OI();
+    SmartDashboard dash = new SmartDashboard();
+    DriveTrain drive = new DriveTrain();
+    frisbeeShooter shooter = new frisbeeShooter();
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
@@ -33,7 +40,10 @@ public class Main extends IterativeRobot {
     public void robotInit() {
         // instantiate the command used for the autonomous period
         autonomousCommand = new ExampleCommand();
-
+        
+        //Get all the other variables a go.
+        deadZone = 0.15;
+        
         // Initialize all subsystems
         CommandBase.init();
     }
@@ -63,6 +73,44 @@ public class Main extends IterativeRobot {
      */
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
+        
+        //ALL THE DRIVE TRAIN CONTROLS
+        if((Math.abs(oi.get1LsY()) > deadZone) || (Math.abs(oi.get1RsX()) > deadZone)){
+            if((Math.abs(oi.get1LsY()) > deadZone) && (Math.abs(oi.get1RsX()) > deadZone)){
+                //DRIVING AND TURNING AT THE SAME TIME
+                double leftSidePwr = oi.get1LsY() - oi.get1RsX();
+                double rightSidePwr = oi.get1LsY() + oi.get1RsX();
+                
+                drive.set(leftSidePwr, rightSidePwr);
+                
+                
+            } else if((Math.abs(oi.get1LsY()) > deadZone) && (Math.abs(oi.get1RsX()) <= deadZone)){
+                //ONLY DRIVING STRAIGHT.
+                double leftSidePwr = oi.get1LsY();
+                double rightSidePwr = oi.get1LsY();
+                
+                drive.set(leftSidePwr, rightSidePwr);
+            } else if((Math.abs(oi.get1LsY()) <= deadZone) && (Math.abs(oi.get1RsX()) > deadZone)){
+                //ONLY TURNING
+                double rightSidePwr = oi.get1RsX();
+                double leftSidePwr = -1 * oi.get1RsX();
+                
+                drive.set(leftSidePwr, rightSidePwr);
+            } else {
+                drive.stopDriving();
+            }
+            
+            
+        } else {
+            drive.stopDriving();
+        }
+        
+        //ALL THE SHOOTER CONTROLS
+        if(oi.get1BtnA()){
+            shooter.setSpeed(-0.5);
+        } else {
+            shooter.stopDriving();
+        }
     }
     
     /**

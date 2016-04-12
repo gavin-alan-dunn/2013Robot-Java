@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.DigitalIOButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -20,7 +21,7 @@ public class OI {
     
     
     //CREATE AXIS PORTS
-    int LsY = 1, LsX = 2, RsY = 3, RsX = 4;
+    int LsY = 2, LsX = 1, RsX = 5;
     
     //CREATE BUTTON PORTS
     int BtnA = 1, BtnB = 2, BtnX = 3, BtnY = 4;
@@ -30,7 +31,8 @@ public class OI {
     
     Joystick gamepad2 = new Joystick(Joystick2_Port);
     
-    
+    //CREATING BUTTONS
+    Button btnA = new JoystickButton(gamepad1, 1);
     
     /*
     All the actual button and axis methods.
@@ -45,10 +47,6 @@ public class OI {
         return gamepad1.getRawAxis(LsX);
     }
     
-    public double get1RsY() {
-        return gamepad1.getRawAxis(RsY);
-    }
-    
     public double get1RsX() {
         return gamepad1.getRawAxis(RsX);
     }
@@ -61,12 +59,16 @@ public class OI {
         return gamepad2.getRawAxis(LsX);
     }
     
-    public double get2RsY() {
-        return gamepad2.getRawAxis(RsY);
-    }
-    
     public double get2RsX() {
         return gamepad2.getRawAxis(RsX);
+    }
+    
+    public boolean get1BtnA() {
+        return btnA.get();
+    }
+    
+    public boolean get1BtnB() {
+        return gamepad2.getRawButton(BtnB);
     }
     
     //CREATE THE BUTTON OBJECTS AND TRIGGERS
