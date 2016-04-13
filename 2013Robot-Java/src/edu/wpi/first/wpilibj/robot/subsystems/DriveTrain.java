@@ -9,6 +9,7 @@ package edu.wpi.first.wpilibj.robot.subsystems;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.robot.RobotMap;
 import edu.wpi.first.wpilibj.Jaguar;
+import edu.wpi.first.wpilibj.Encoder;
 
 /**
  *
@@ -22,6 +23,9 @@ public class DriveTrain extends Subsystem {
     Jaguar leftFrontMotor = new Jaguar(RobotMap.JaguarLeftFront);
     Jaguar rightBackMotor = new Jaguar(RobotMap.JaguarRightBack);
     Jaguar rightFrontMotor = new Jaguar(RobotMap.JaguarRightFront);
+    
+    //Create any encoder objects that are located on the drive train.
+    //None right now.
     
     
     public void initDefaultCommand() {

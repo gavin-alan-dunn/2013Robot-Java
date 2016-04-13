@@ -30,7 +30,6 @@ public class Main extends IterativeRobot {
     Command autonomousCommand;
     double deadZone;
     OI oi = new OI();
-    SmartDashboard dash = new SmartDashboard();
     DriveTrain drive = new DriveTrain();
     frisbeeShooter shooter = new frisbeeShooter();
     /**
@@ -42,7 +41,7 @@ public class Main extends IterativeRobot {
         autonomousCommand = new ExampleCommand();
         
         //Get all the other variables a go.
-        deadZone = 0.15;
+        deadZone = 0.25;
         
         // Initialize all subsystems
         CommandBase.init();
@@ -101,9 +100,16 @@ public class Main extends IterativeRobot {
             }
             
             
+        } else if(Math.abs(oi.get1LsX()) > deadZone){
+            //ONLY STRAFING
+            
+            double speed = oi.get1LsX();
+            drive.strafe(speed);            
         } else {
             drive.stopDriving();
         }
+        
+        
         
         //ALL THE SHOOTER CONTROLS
         if(oi.get1BtnA()){
@@ -111,6 +117,22 @@ public class Main extends IterativeRobot {
         } else {
             shooter.stopDriving();
         }
+        
+        
+        //ALL THE OUTPUT TO THE DRIVER STATION
+        
+        //Return l/r percent to the dashboard.
+        SmartDashboard.putNumber("Left Motor Percentage: ", drive.getSpeedLeftSide());
+        SmartDashboard.putNumber("Right Motor Percentage: ", drive.getSpeedRightSide());
+        
+        //Return whether a frisbee is in or not.
+        SmartDashboard.putBoolean("Frisbee In? ", shooter.isFrisbeeIn());
+        
+        //Return the encoder rate from the shooter motor, unknown units still.
+        SmartDashboard.putNumber("Encoder Rate Shooter: ", shooter.getShooterRate());
+        
+        
+        
     }
     
     /**
