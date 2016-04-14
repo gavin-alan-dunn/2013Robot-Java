@@ -9,7 +9,7 @@ package edu.wpi.first.wpilibj.robot.subsystems;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.robot.RobotMap;
 import edu.wpi.first.wpilibj.Jaguar;
-import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.RobotDrive;
 
 /**
  *
@@ -27,26 +27,17 @@ public class DriveTrain extends Subsystem {
     //Create any encoder objects that are located on the drive train.
     //None right now.
     
+    //Create any other objects.
+    RobotDrive MecanumDrive = new RobotDrive(leftFrontMotor, leftBackMotor, rightFrontMotor, rightBackMotor);
+    
     
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
         //setDefaultCommand(new MySpecialCommand());
     }
     
-    public void set(double leftPwr, double rightPwr){
-        leftBackMotor.set(leftPwr);
-        leftFrontMotor.set(leftPwr);
-        
-        rightBackMotor.set(rightPwr);
-        rightFrontMotor.set(rightPwr);
-    }
-    
-    public void stopDriving(){
-        leftBackMotor.set(0);
-        leftFrontMotor.set(0);
-        
-        rightBackMotor.set(0);
-        rightFrontMotor.set(0);
+    public void set(double x, double y, double rotation, double gyro){
+        MecanumDrive.mecanumDrive_Cartesian(x, y, rotation, gyro);
     }
     
     public double getSpeedLeftSide(){
@@ -63,14 +54,6 @@ public class DriveTrain extends Subsystem {
         } else {
             return rightBackMotor.get();
         }
-    }
-    
-    public void strafe(double speed){
-        leftBackMotor.set(speed);
-        rightBackMotor.set(speed);
-        
-        leftFrontMotor.set(-speed);
-        rightFrontMotor.set(-speed);
     }
     
 }

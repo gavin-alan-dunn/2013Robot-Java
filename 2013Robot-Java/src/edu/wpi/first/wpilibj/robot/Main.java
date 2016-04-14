@@ -60,10 +60,6 @@ public class Main extends IterativeRobot {
     }
 
     public void teleopInit() {
-	// This makes sure that the autonomous stops running when
-        // teleop starts running. If you want the autonomous to 
-        // continue until interrupted by another command, remove
-        // this line or comment it out.
         autonomousCommand.cancel();
     }
 
@@ -74,42 +70,13 @@ public class Main extends IterativeRobot {
         Scheduler.getInstance().run();
         
         //ALL THE DRIVE TRAIN CONTROLS
-        if((Math.abs(oi.get1LsY()) > deadZone) || (Math.abs(oi.get1RsX()) > deadZone)){
-            if((Math.abs(oi.get1LsY()) > deadZone) && (Math.abs(oi.get1RsX()) > deadZone)){
-                //DRIVING AND TURNING AT THE SAME TIME
-                double leftSidePwr = oi.get1LsY() - oi.get1RsX();
-                double rightSidePwr = oi.get1LsY() + oi.get1RsX();
-                
-                drive.set(leftSidePwr, rightSidePwr);
-                
-                
-            } else if((Math.abs(oi.get1LsY()) > deadZone) && (Math.abs(oi.get1RsX()) <= deadZone)){
-                //ONLY DRIVING STRAIGHT.
-                double leftSidePwr = oi.get1LsY();
-                double rightSidePwr = oi.get1LsY();
-                
-                drive.set(leftSidePwr, rightSidePwr);
-            } else if((Math.abs(oi.get1LsY()) <= deadZone) && (Math.abs(oi.get1RsX()) > deadZone)){
-                //ONLY TURNING
-                double rightSidePwr = oi.get1RsX();
-                double leftSidePwr = -1 * oi.get1RsX();
-                
-                drive.set(leftSidePwr, rightSidePwr);
-            } else {
-                drive.stopDriving();
-            }
-            
-            
-        } else if(Math.abs(oi.get1LsX()) > deadZone){
-            //ONLY STRAFING
-            
-            double speed = oi.get1LsX();
-            drive.strafe(speed);            
+        if((Math.abs(oi.get1LsY()) > deadZone) || (Math.abs(oi.get1RsX()) > deadZone) || (Math.abs(oi.get1LsX()) > deadZone)){
+            //Move the robot without gyro.
+            drive.set(oi.get1LsX(), oi.get1LsY(), oi.get1RsX(), 0);
         } else {
-            drive.stopDriving();
+            //Stop the robot.
+            drive.set(0,0,0,0);
         }
-        
-        
         
         //ALL THE SHOOTER CONTROLS
         if(oi.get1BtnA()){
@@ -118,9 +85,7 @@ public class Main extends IterativeRobot {
             shooter.stopDriving();
         }
         
-        
         //ALL THE OUTPUT TO THE DRIVER STATION
-        
         //Return l/r percent to the dashboard.
         SmartDashboard.putNumber("Left Motor Percentage: ", drive.getSpeedLeftSide());
         SmartDashboard.putNumber("Right Motor Percentage: ", drive.getSpeedRightSide());
@@ -129,10 +94,7 @@ public class Main extends IterativeRobot {
         SmartDashboard.putBoolean("Frisbee In? ", shooter.isFrisbeeIn());
         
         //Return the encoder rate from the shooter motor, unknown units still.
-        SmartDashboard.putNumber("Encoder Rate Shooter: ", shooter.getShooterRate());
-        
-        
-        
+        SmartDashboard.putNumber("Encoder Rate Shooter: ", shooter.getShooterRate());   
     }
     
     /**
