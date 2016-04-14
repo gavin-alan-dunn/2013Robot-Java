@@ -68,7 +68,7 @@ public class Main extends IterativeRobot {
      */
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
-        
+        while(isOperatorControl() && isEnabled()){
         //ALL THE DRIVE TRAIN CONTROLS
         if((Math.abs(oi.get1LsY()) > deadZone) || (Math.abs(oi.get1RsX()) > deadZone) || (Math.abs(oi.get1LsX()) > deadZone)){
             //Move the robot without gyro.
@@ -96,7 +96,7 @@ public class Main extends IterativeRobot {
         //Return the encoder rate from the shooter motor, unknown units still.
         SmartDashboard.putNumber("Encoder Rate Shooter: ", shooter.getShooterRate());   
     }
-    
+    }
     /**
      * This function is called periodically during test mode
      */
