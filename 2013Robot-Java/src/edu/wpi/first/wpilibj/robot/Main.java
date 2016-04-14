@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.robot.commands.CommandBase;
 import edu.wpi.first.wpilibj.robot.commands.ExampleCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.robot.subsystems.frisbeeShooter;
-
+import edu.wpi.first.wpilibj.robot.subsystems.Sensors;
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the IterativeRobot
@@ -32,6 +32,7 @@ public class Main extends IterativeRobot {
     OI oi = new OI();
     DriveTrain drive = new DriveTrain();
     frisbeeShooter shooter = new frisbeeShooter();
+    Sensors sensor = new Sensors();
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
@@ -85,6 +86,14 @@ public class Main extends IterativeRobot {
             shooter.stopDriving();
         }
         
+        //All of the gyro controls
+        if(oi.get1BtnB()){
+            boolean reset = sensor.resetGyro();
+            System.out.println(reset);
+        } else {
+            System.out.println("Gyro not being reset doe.");
+        }
+        
         //ALL THE OUTPUT TO THE DRIVER STATION
         //Return l/r percent to the dashboard.
         SmartDashboard.putNumber("Left Motor Percentage: ", drive.getSpeedLeftSide());
@@ -95,6 +104,9 @@ public class Main extends IterativeRobot {
         
         //Return the encoder rate from the shooter motor, unknown units still.
         SmartDashboard.putNumber("Encoder Rate Shooter: ", shooter.getShooterRate());   
+        
+        //Return the heading from the gyro
+        SmartDashboard.putNumber("Gyro Angle: ", sensor.getGyroAngle());
     }
     }
     /**

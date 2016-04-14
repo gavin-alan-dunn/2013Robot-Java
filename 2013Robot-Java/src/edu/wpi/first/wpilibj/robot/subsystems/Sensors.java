@@ -7,6 +7,7 @@ package edu.wpi.first.wpilibj.robot.subsystems;
 
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.Gyro;
 
 
 public class Sensors extends Subsystem {
