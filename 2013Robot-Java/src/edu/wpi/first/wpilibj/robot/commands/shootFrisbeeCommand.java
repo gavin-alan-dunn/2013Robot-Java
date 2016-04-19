@@ -5,25 +5,21 @@
  */
 package edu.wpi.first.wpilibj.robot.commands;
 
-import edu.wpi.first.wpilibj.robot.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj.robot.subsystems.frisbeeShooter;
 /**
  *
  * @author dunng18
  */
 public class shootFrisbeeCommand extends CommandBase {
-    DriveTrain drive = new DriveTrain();
     frisbeeShooter frisbee = new frisbeeShooter();
     
     public shootFrisbeeCommand() {
         //Use requies to declare dependencies.
         requires(frisbee);
-        requires(drive);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-        
         
     }
 

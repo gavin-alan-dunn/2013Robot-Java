@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.robot.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj.robot.commands.CommandBase;
-import edu.wpi.first.wpilibj.robot.commands.ExampleCommand;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.robot.subsystems.frisbeeShooter;
 import edu.wpi.first.wpilibj.robot.subsystems.Sensors;
@@ -26,31 +26,29 @@ import edu.wpi.first.wpilibj.robot.subsystems.Sensors;
  * directory.
  */
 public class Main extends IterativeRobot {
-
-    Command autonomousCommand;
-    double deadZone;
     OI oi = new OI();
     DriveTrain drive = new DriveTrain();
     frisbeeShooter shooter = new frisbeeShooter();
     Sensors sensor = new Sensors();
+    Timer RobotTime = new Timer();
+    double deadZone = 0.25;
+    
+    
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
     public void robotInit() {
-        // instantiate the command used for the autonomous period
-        autonomousCommand = new ExampleCommand();
-        
-        //Get all the other variables a go.
-        deadZone = 0.25;
-        
-        // Initialize all subsystems
         CommandBase.init();
+        
+        
     }
 
     public void autonomousInit() {
-        // schedule the autonomous command (example)
-        autonomousCommand.start();
+        sensor.resetGyro();
+        sensor.resetEncoder();
+        RobotTime.reset();
+        RobotTime.start();
     }
 
     /**
@@ -58,12 +56,26 @@ public class Main extends IterativeRobot {
      */
     public void autonomousPeriodic() {
         Scheduler.getInstance().run();
+        
+        while(isAutonomous()){
+            while(RobotTime.get() < 5){
+                //Drive straight forwards for 5 seconds.
+                drive.driveStraight(0.5, sensor.getGyroAngle());
+            
+            }
+            //Stop the robot
+            drive.stopDriving();
+            
+            
+            //Output the time into auto in seconds.
+            SmartDashboard.putNumber("Auto Time: ", RobotTime.get());
+        }
+        
     }
 
     public void teleopInit() {
-        autonomousCommand.cancel();
         sensor.resetGyro();
-        shooter.resetEncoder();
+        sensor.resetEncoder();
     }
 
     /**
@@ -83,7 +95,7 @@ public class Main extends IterativeRobot {
         
         //ALL THE SHOOTER CONTROLS
         if(oi.get1BtnA()){
-            shooter.setRate(5000);
+            shooter.setSpeed(-1.0);
         } else {
             shooter.stopDriving();
         }
@@ -94,12 +106,10 @@ public class Main extends IterativeRobot {
         SmartDashboard.putNumber("Right Front Motor Percentage: ", drive.getSpeedRightFrontSide() * 100);
         SmartDashboard.putNumber("Left Rear Motor Percentage: ", drive.getSpeedLeftRearSide() * 100);
         SmartDashboard.putNumber("Right Rear Motor Percentage: ", drive.getSpeedRightRearSide() * 100);
-        
-        //Return whether a frisbee is in or not.
-        SmartDashboard.putBoolean("Frisbee In? ", shooter.isFrisbeeIn());
+       
         
         //Return the encoder rate from the shooter motor, unknown units still.
-        SmartDashboard.putNumber("Encoder Rate Shooter: ", shooter.getShooterRate());   
+        SmartDashboard.putNumber("Encoder Rate Shooter: ", sensor.getShooterRate());   
         
         //Return the heading from the gyro
         SmartDashboard.putNumber("Gyro Angle: ", sensor.getGyroAngle());

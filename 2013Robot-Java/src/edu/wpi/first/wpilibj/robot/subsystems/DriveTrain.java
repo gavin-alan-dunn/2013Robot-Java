@@ -32,19 +32,19 @@ public class DriveTrain extends Subsystem {
     
     
     public void initDefaultCommand() {
-        // Set the default command for a subsystem here.
-        //setDefaultCommand(new MySpecialCommand());
+        MecanumDrive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
+        MecanumDrive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
     }
     
     public void set(double x, double y, double rotation, double gyro){
-        MecanumDrive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
-        MecanumDrive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
+        
         MecanumDrive.mecanumDrive_Cartesian(-x, y, rotation, gyro);
     }
     
-    public void driveStraight(double power, double Kp, double angle){
-        MecanumDrive.drive(power, -angle * Kp);
+    public void driveStraight(double power, double gyro){
+        MecanumDrive.mecanumDrive_Cartesian(0, power, 0, gyro);
     }
+    
     public double getSpeedLeftRearSide(){
         return leftBackMotor.get();
     }
@@ -59,6 +59,10 @@ public class DriveTrain extends Subsystem {
     
     public double getSpeedRightFrontSide(){
         return rightFrontMotor.get();
+    }
+    
+    public void stopDriving(){
+        MecanumDrive.mecanumDrive_Cartesian(0, 0, 0, 0);
     }
     
 }
