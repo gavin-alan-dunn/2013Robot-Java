@@ -25,7 +25,7 @@ public class DriveTrain extends Subsystem {
     Jaguar rightFrontMotor = new Jaguar(RobotMap.JaguarRightFront);
     
     //Create any encoder objects that are located on the drive train.
-    //None right now.
+    
     
     //Create any other objects.
     RobotDrive MecanumDrive = new RobotDrive(leftFrontMotor, leftBackMotor, rightFrontMotor, rightBackMotor);
@@ -37,23 +37,28 @@ public class DriveTrain extends Subsystem {
     }
     
     public void set(double x, double y, double rotation, double gyro){
-        MecanumDrive.mecanumDrive_Cartesian(x, y, rotation, gyro);
+        MecanumDrive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
+        MecanumDrive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
+        MecanumDrive.mecanumDrive_Cartesian(-x, y, rotation, gyro);
     }
     
-    public double getSpeedLeftSide(){
-        if(leftBackMotor.get() != leftFrontMotor.get()){
-            return 0;
-        } else {
-            return leftBackMotor.get();
-        }
+    public void driveStraight(double power, double Kp, double angle){
+        MecanumDrive.drive(power, -angle * Kp);
+    }
+    public double getSpeedLeftRearSide(){
+        return leftBackMotor.get();
     }
     
-    public double getSpeedRightSide(){
-        if(rightBackMotor.get() != rightFrontMotor.get()){
-            return 0;
-        } else {
-            return rightBackMotor.get();
-        }
+    public double getSpeedLeftFrontSide() {
+        return leftFrontMotor.get();
+    }
+    
+    public double getSpeedRightRearSide(){
+        return rightBackMotor.get();
+    }
+    
+    public double getSpeedRightFrontSide(){
+        return rightFrontMotor.get();
     }
     
 }

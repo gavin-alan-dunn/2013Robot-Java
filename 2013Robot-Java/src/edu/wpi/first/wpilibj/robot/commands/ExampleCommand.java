@@ -1,12 +1,13 @@
 
 package edu.wpi.first.wpilibj.robot.commands;
 
+import edu.wpi.first.wpilibj.robot.subsystems.DriveTrain;
+import edu.wpi.first.wpilibj.robot.subsystems.Sensors;
 /**
  *
  * @author bradmiller
  */
 public class ExampleCommand extends CommandBase {
-
     public ExampleCommand() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
@@ -14,10 +15,12 @@ public class ExampleCommand extends CommandBase {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+   
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+        
     }
 
     // Make this return true when this Command no longer needs to run execute()

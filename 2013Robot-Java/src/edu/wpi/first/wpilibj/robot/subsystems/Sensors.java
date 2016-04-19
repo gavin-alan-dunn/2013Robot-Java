@@ -22,13 +22,9 @@ public class Sensors extends Subsystem {
         //setDefaultCommand(new MySpecialCommand());
     }
     
-    public boolean resetGyro(){
+    public void resetGyro(){
         //Reset the gyro's 0 degree angle to the current angle, returns T or F.\
         gyroAngle.reset();
-        while(Math.abs(gyroAngle.getAngle()) > gyroResetValue){
-          return false;
-        }
-        return true;
     }
     
     public double getGyroAngle(){

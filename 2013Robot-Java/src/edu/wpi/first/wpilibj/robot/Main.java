@@ -62,6 +62,8 @@ public class Main extends IterativeRobot {
 
     public void teleopInit() {
         autonomousCommand.cancel();
+        sensor.resetGyro();
+        shooter.resetEncoder();
     }
 
     /**
@@ -81,23 +83,17 @@ public class Main extends IterativeRobot {
         
         //ALL THE SHOOTER CONTROLS
         if(oi.get1BtnA()){
-            shooter.setSpeed(-0.5);
+            shooter.setRate(5000);
         } else {
             shooter.stopDriving();
         }
         
-        //All of the gyro controls
-        if(oi.get1BtnB()){
-            boolean reset = sensor.resetGyro();
-            System.out.println(reset);
-        } else {
-            System.out.println("Gyro not being reset doe.");
-        }
-        
         //ALL THE OUTPUT TO THE DRIVER STATION
         //Return l/r percent to the dashboard.
-        SmartDashboard.putNumber("Left Motor Percentage: ", drive.getSpeedLeftSide());
-        SmartDashboard.putNumber("Right Motor Percentage: ", drive.getSpeedRightSide());
+        SmartDashboard.putNumber("Left Front Motor Percentage: ", drive.getSpeedLeftFrontSide() * 100);
+        SmartDashboard.putNumber("Right Front Motor Percentage: ", drive.getSpeedRightFrontSide() * 100);
+        SmartDashboard.putNumber("Left Rear Motor Percentage: ", drive.getSpeedLeftRearSide() * 100);
+        SmartDashboard.putNumber("Right Rear Motor Percentage: ", drive.getSpeedRightRearSide() * 100);
         
         //Return whether a frisbee is in or not.
         SmartDashboard.putBoolean("Frisbee In? ", shooter.isFrisbeeIn());
@@ -109,6 +105,15 @@ public class Main extends IterativeRobot {
         SmartDashboard.putNumber("Gyro Angle: ", sensor.getGyroAngle());
     }
     }
+    
+    public void disabledInit(){
+        
+    }
+    
+    public void disabledPeriodic(){
+        drive.set(0, 0, 0, 0);
+    }
+    
     /**
      * This function is called periodically during test mode
      */

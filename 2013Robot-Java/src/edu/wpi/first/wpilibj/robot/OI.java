@@ -21,7 +21,7 @@ public class OI {
     
     
     //CREATE AXIS PORTS
-    int LsY = 2, LsX = 1, RsX = 5;
+    int LsY = 2, LsX = 1, RsX = 4;
     
     //CREATE BUTTON PORTS
     int BtnA = 1, BtnB = 2, BtnX = 3, BtnY = 4;
