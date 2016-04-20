@@ -48,30 +48,26 @@ public class Main extends IterativeRobot {
         sensor.resetGyro();
         sensor.resetEncoder();
         RobotTime.reset();
-        RobotTime.start();
     }
 
     /**
      * This function is called periodically during autonomous
      */
     public void autonomousPeriodic() {
-        Scheduler.getInstance().run();
-        
+        RobotTime.start();
         while(isAutonomous()){
-            while(RobotTime.get() < 5){
-                //Drive straight forwards for 5 seconds.
-                drive.driveStraight(0.5, sensor.getGyroAngle());
-            
+            while(RobotTime.get() < 4){
+                //Drive Straight for 4 seconds.
+                drive.driveStraight(-0.25, 0.0, sensor.getGyroAngle());
             }
-            //Stop the robot
+            while(drive.turnToAngle(0, sensor.getGyroAngle()) == false){
+              drive.turnToAngle(0, sensor.getGyroAngle());
+            }
             drive.stopDriving();
-            
-            
-            //Output the time into auto in seconds.
-            SmartDashboard.putNumber("Auto Time: ", RobotTime.get());
+        }
         }
         
-    }
+    
 
     public void teleopInit() {
         sensor.resetGyro();
@@ -82,7 +78,9 @@ public class Main extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
+   
         Scheduler.getInstance().run();
+        
         while(isOperatorControl() && isEnabled()){
         //ALL THE DRIVE TRAIN CONTROLS
         if((Math.abs(oi.get1LsY()) > deadZone) || (Math.abs(oi.get1RsX()) > deadZone) || (Math.abs(oi.get1LsX()) > deadZone)){
@@ -90,8 +88,10 @@ public class Main extends IterativeRobot {
             drive.set(oi.get1LsX(), oi.get1LsY(), oi.get1RsX(), 0);
         } else {
             //Stop the robot.
-            drive.set(0,0,0,0);
+            drive.stopDriving();
         }
+        
+          
         
         //ALL THE SHOOTER CONTROLS
         if(oi.get1BtnA()){
@@ -113,15 +113,11 @@ public class Main extends IterativeRobot {
         
         //Return the heading from the gyro
         SmartDashboard.putNumber("Gyro Angle: ", sensor.getGyroAngle());
-    }
-    }
-    
-    public void disabledInit(){
+        
+        //Return the switch status.
+        SmartDashboard.putBoolean("Switch State: ", sensor.getShooterSwitchState());
         
     }
-    
-    public void disabledPeriodic(){
-        drive.set(0, 0, 0, 0);
     }
     
     /**

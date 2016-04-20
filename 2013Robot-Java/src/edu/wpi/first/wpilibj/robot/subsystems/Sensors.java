@@ -11,17 +11,19 @@ import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.robot.RobotMap;
+import edu.wpi.first.wpilibj.buttons.DigitalIOButton;
 
 
 public class Sensors extends Subsystem {
-    //Create some constants
-    double gyroResetValue = 2.5;
     
     //Create the gyro sensor
     Gyro gyroAngle = new Gyro(1); //Create a gyro on analog channel one.
     
     //Create the encoder object for the shooter.
     Encoder shooterEnc = new Encoder(RobotMap.ShooterEnc1, RobotMap.ShooterEnc2, true, EncodingType.k4X);
+    
+    //Create the limit switch object.
+    DigitalIOButton shooterSwitch = new DigitalIOButton(1);
     
     public void initDefaultCommand() {
         shooterEnc.setMaxPeriod(.2);
@@ -47,6 +49,10 @@ public class Sensors extends Subsystem {
     public void resetEncoder(){
         shooterEnc.reset();
         shooterEnc.start();
+    }
+    
+    public boolean getShooterSwitchState(){
+        return shooterSwitch.get();
     }
     
 }
