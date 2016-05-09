@@ -25,4 +25,7 @@ public class RobotMap {
     //DIGITAL SWITCH PORTS
     public static final int ShooterSwitch = 1;
     
+    //PNEUMATICS
+    public static final int SpikeFrisbee = 5;
+    public static final int SwitchShooter = 6;
 }

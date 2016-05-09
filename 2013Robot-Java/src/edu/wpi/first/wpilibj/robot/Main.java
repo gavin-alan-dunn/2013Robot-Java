@@ -56,12 +56,15 @@ public class Main extends IterativeRobot {
     public void autonomousPeriodic() {
         RobotTime.start();
         while(isAutonomous()){
+            while(drive.turnToAngle(90, sensor.getGyroAngle()) == false){
+              drive.turnToAngle(90, sensor.getGyroAngle());
+            }
             while(RobotTime.get() < 4){
                 //Drive Straight for 4 seconds.
                 drive.driveStraight(-0.25, 0.0, sensor.getGyroAngle());
             }
-            while(drive.turnToAngle(0, sensor.getGyroAngle()) == false){
-              drive.turnToAngle(0, sensor.getGyroAngle());
+            while(drive.turnToAngle(180, sensor.getGyroAngle()) == false){
+              drive.turnToAngle(180, sensor.getGyroAngle());
             }
             drive.stopDriving();
         }
@@ -95,9 +98,15 @@ public class Main extends IterativeRobot {
         
         //ALL THE SHOOTER CONTROLS
         if(oi.get1BtnA()){
-            shooter.setSpeed(-1.0);
+            shooter.spinTo(50000, sensor.getShooterRate());
         } else {
             shooter.stopDriving();
+        }
+        
+        if(oi.get1BtnB()){
+            shooter.startCompressor();
+        } else {
+            shooter.stopCompressor();
         }
         
         //ALL THE OUTPUT TO THE DRIVER STATION
@@ -114,8 +123,9 @@ public class Main extends IterativeRobot {
         //Return the heading from the gyro
         SmartDashboard.putNumber("Gyro Angle: ", sensor.getGyroAngle());
         
-        //Return the switch status.
-        SmartDashboard.putBoolean("Switch State: ", sensor.getShooterSwitchState());
+        //Return the error from the shooter.
+        SmartDashboard.putNumber("Shooter Error: ", shooter.returnShooterError());
+        SmartDashboard.putBoolean("Is Frisbee In? ", sensor.getShooterSwitchState());
         
     }
     }

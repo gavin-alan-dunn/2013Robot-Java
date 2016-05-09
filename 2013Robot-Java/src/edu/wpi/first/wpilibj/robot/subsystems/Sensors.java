@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.robot.RobotMap;
-import edu.wpi.first.wpilibj.buttons.DigitalIOButton;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 
 public class Sensors extends Subsystem {
@@ -23,7 +23,7 @@ public class Sensors extends Subsystem {
     Encoder shooterEnc = new Encoder(RobotMap.ShooterEnc1, RobotMap.ShooterEnc2, true, EncodingType.k4X);
     
     //Create the limit switch object.
-    DigitalIOButton shooterSwitch = new DigitalIOButton(1);
+    DigitalInput shooterSwitch = new DigitalInput(1);
     
     public void initDefaultCommand() {
         shooterEnc.setMaxPeriod(.2);

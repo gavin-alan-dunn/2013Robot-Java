@@ -18,7 +18,9 @@ public class frisbeeShooter extends Subsystem {
     
     //Create the talon object that the shooter uses.
     Talon shooterMotor = new Talon(RobotMap.ShooterWheel);
+    Talon AirComp = new Talon(RobotMap.SpikeFrisbee);
     
+    public double error;
     
     
     public void initDefaultCommand() {
@@ -36,5 +38,31 @@ public class frisbeeShooter extends Subsystem {
     public double getShooterSpeed(){
         return shooterMotor.get();
     }
+    
+    public void spinTo(double targetRate, double encoderRate){
+        error = targetRate - encoderRate;
+        if(error > 5000){
+            shooterMotor.set(-1.0);
+        } else if(error <= 5000 && error > 2000){
+            shooterMotor.set(-0.5);
+        } else if(error <= 2000 && error > 500){
+            shooterMotor.set(-0.3);
+        } else {
+            shooterMotor.set(-0.1);
+        }
+    }
+    
+    public double returnShooterError(){
+        return error;
+    }
+    
+    public void startCompressor(){
+        AirComp.set(1.0);
+    }
+    
+    public void stopCompressor(){
+        AirComp.set(0);
+    }
+    
         
 }
