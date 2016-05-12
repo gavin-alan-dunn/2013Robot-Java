@@ -98,15 +98,23 @@ public class Main extends IterativeRobot {
         
         //ALL THE SHOOTER CONTROLS
         if(oi.get1BtnA()){
-            shooter.spinTo(50000, sensor.getShooterRate());
+            shooter.spinTo(125000, sensor.getShooterRate());
         } else {
             shooter.stopDriving();
         }
         
-        if(oi.get1BtnB()){
+        if(shooter.getCompValue() == false){
             shooter.startCompressor();
         } else {
             shooter.stopCompressor();
+        }
+        
+        if(oi.get1BtnX()){
+            shooter.pushInShooter();
+        } else if(oi.get1BtnY()){
+            shooter.pushOutShooter();
+        } else {
+            shooter.pushStop();
         }
         
         //ALL THE OUTPUT TO THE DRIVER STATION
@@ -126,6 +134,9 @@ public class Main extends IterativeRobot {
         //Return the error from the shooter.
         SmartDashboard.putNumber("Shooter Error: ", shooter.returnShooterError());
         SmartDashboard.putBoolean("Is Frisbee In? ", sensor.getShooterSwitchState());
+        
+        //Return the pneumatics values
+        SmartDashboard.putBoolean("Is Pressure Switched?", shooter.getCompValue());
         
     }
     }

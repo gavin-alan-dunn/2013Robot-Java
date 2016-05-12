@@ -26,6 +26,6 @@ public class RobotMap {
     public static final int ShooterSwitch = 1;
     
     //PNEUMATICS
-    public static final int SpikeFrisbee = 5;
+    public static final int SpikeComp = 8;
     public static final int SwitchShooter = 6;
 }

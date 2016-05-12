@@ -21,7 +21,7 @@ public class OI {
     
     
     //CREATE AXIS PORTS
-    int LsY = 2, LsX = 1, RsX = 4;
+    int LsY = 2, LsX = 1, RsX = 5;
     
     //CREATE BUTTON PORTS
     int BtnA = 1, BtnB = 2, BtnX = 3, BtnY = 4;
@@ -33,7 +33,10 @@ public class OI {
     
     //CREATING BUTTONS
     Button btnA = new JoystickButton(gamepad1, 1);
-    
+    Button btnB = new JoystickButton(gamepad1, 2);
+    Button btnX = new JoystickButton(gamepad1, 3);
+    Button btnY = new JoystickButton(gamepad1, 4);
+   
     /*
     All the actual button and axis methods.
     */
@@ -68,15 +71,18 @@ public class OI {
     }
     
     public boolean get1BtnB() {
-        return gamepad2.getRawButton(BtnB);
+        return btnB.get();
     }
     
-    //CREATE THE BUTTON OBJECTS AND TRIGGERS
+    public boolean get1BtnX() {
+        return btnX.get();
+    }
     
+    public boolean get1BtnY() {
+        return btnY.get();
+    }
     
-    //CREATE METHODS TO OUTPUT DATA TO DASHBOARD.
-    
-    //Create the joysticks
+   
     //// CREATING BUTTONS
     // One type of button is a joystick button which is any button on a joystick.
     // You create one by telling it which joystick it's on and which button
