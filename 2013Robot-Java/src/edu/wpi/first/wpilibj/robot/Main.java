@@ -9,15 +9,11 @@ package edu.wpi.first.wpilibj.robot;
 
 
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.robot.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj.robot.commands.CommandBase;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.robot.subsystems.frisbeeShooter;
-import edu.wpi.first.wpilibj.robot.subsystems.Sensors;
+import edu.wpi.first.wpilibj.robot.commands.autoCommand;
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the IterativeRobot
@@ -25,120 +21,39 @@ import edu.wpi.first.wpilibj.robot.subsystems.Sensors;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
-public class Main extends IterativeRobot {
-    OI oi = new OI();
-    DriveTrain drive = new DriveTrain();
-    frisbeeShooter shooter = new frisbeeShooter();
-    Sensors sensor = new Sensors();
-    Timer RobotTime = new Timer();
-    double deadZone = 0.25;
+public class Main extends IterativeRobot {   
+    //Instantiate variables here
+    Command autonomous;
     
-    
-    /**
-     * This function is run when the robot is first started up and should be
-     * used for any initialization code.
-     */
     public void robotInit() {
         CommandBase.init();
-        
         
     }
 
     public void autonomousInit() {
-        sensor.resetGyro();
-        sensor.resetEncoder();
-        RobotTime.reset();
+        //Set the auto command.
+        autonomous = new autoCommand();
     }
 
-    /**
-     * This function is called periodically during autonomous
-     */
     public void autonomousPeriodic() {
-        RobotTime.start();
-        while(isAutonomous()){
-            while(drive.turnToAngle(90, sensor.getGyroAngle()) == false){
-              drive.turnToAngle(90, sensor.getGyroAngle());
-            }
-            while(RobotTime.get() < 4){
-                //Drive Straight for 4 seconds.
-                drive.driveStraight(-0.25, 0.0, sensor.getGyroAngle());
-            }
-            while(drive.turnToAngle(180, sensor.getGyroAngle()) == false){
-              drive.turnToAngle(180, sensor.getGyroAngle());
-            }
-            drive.stopDriving();
-        }
+        //Start the auto command.
+        autonomous.start();
+        
         }
         
     
 
     public void teleopInit() {
-        sensor.resetGyro();
-        sensor.resetEncoder();
+        //Make sure the auto command stops.
+        autonomous.cancel();
     }
 
     /**
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
-   
+        //Make sure that commands are run in teleop.
         Scheduler.getInstance().run();
-        
-        while(isOperatorControl() && isEnabled()){
-        //ALL THE DRIVE TRAIN CONTROLS
-        if((Math.abs(oi.get1LsY()) > deadZone) || (Math.abs(oi.get1RsX()) > deadZone) || (Math.abs(oi.get1LsX()) > deadZone)){
-            //Move the robot without gyro.
-            drive.set(oi.get1LsX(), oi.get1LsY(), oi.get1RsX(), 0);
-        } else {
-            //Stop the robot.
-            drive.stopDriving();
-        }
-        
-          
-        
-        //ALL THE SHOOTER CONTROLS
-        if(oi.get1BtnA()){
-            shooter.spinTo(125000, sensor.getShooterRate());
-        } else {
-            shooter.stopDriving();
-        }
-        
-        if(shooter.getCompValue() == false){
-            shooter.startCompressor();
-        } else {
-            shooter.stopCompressor();
-        }
-        
-        if(oi.get1BtnX()){
-            shooter.pushInShooter();
-        } else if(oi.get1BtnY()){
-            shooter.pushOutShooter();
-        } else {
-            shooter.pushStop();
-        }
-        
-        //ALL THE OUTPUT TO THE DRIVER STATION
-        //Return l/r percent to the dashboard.
-        SmartDashboard.putNumber("Left Front Motor Percentage: ", drive.getSpeedLeftFrontSide() * 100);
-        SmartDashboard.putNumber("Right Front Motor Percentage: ", drive.getSpeedRightFrontSide() * 100);
-        SmartDashboard.putNumber("Left Rear Motor Percentage: ", drive.getSpeedLeftRearSide() * 100);
-        SmartDashboard.putNumber("Right Rear Motor Percentage: ", drive.getSpeedRightRearSide() * 100);
-       
-        
-        //Return the encoder rate from the shooter motor, unknown units still.
-        SmartDashboard.putNumber("Encoder Rate Shooter: ", sensor.getShooterRate());   
-        
-        //Return the heading from the gyro
-        SmartDashboard.putNumber("Gyro Angle: ", sensor.getGyroAngle());
-        
-        //Return the error from the shooter.
-        SmartDashboard.putNumber("Shooter Error: ", shooter.returnShooterError());
-        SmartDashboard.putBoolean("Is Frisbee In? ", sensor.getShooterSwitchState());
-        
-        //Return the pneumatics values
-        SmartDashboard.putBoolean("Is Pressure Switched?", shooter.getCompValue());
-        
-    }
     }
     
     /**

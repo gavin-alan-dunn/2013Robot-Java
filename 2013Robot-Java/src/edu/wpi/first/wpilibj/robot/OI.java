@@ -2,10 +2,11 @@
 package edu.wpi.first.wpilibj.robot;
 
 import edu.wpi.first.wpilibj.buttons.Button;
-import edu.wpi.first.wpilibj.buttons.DigitalIOButton;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.robot.commands.StrafeArcadeCommand;
+import edu.wpi.first.wpilibj.robot.commands.shootFrisbeeCommand;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -13,75 +14,62 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
  */
 public class OI {
     //CREATE JOYSTICK PORTS
-    int Joystick1_Port = 1, Joystick2_Port = 2;
-    
-    /*
-    UPDATE THE PORTS PLZ
-    */
-    
+    int Joystick1_Port = 1, 
+        Joystick2_Port = 2;
+      
     
     //CREATE AXIS PORTS
-    int LsY = 2, LsX = 1, RsX = 5;
+    int LsY = 2, 
+        LsX = 1, 
+        RsX = 5;
     
     //CREATE BUTTON PORTS
-    int BtnA = 1, BtnB = 2, BtnX = 3, BtnY = 4;
+    int BtnA = 1, 
+        BtnB = 2, 
+        BtnX = 3, 
+        BtnY = 4;
     
     //CREATE THE JOYSTICKS
-    Joystick gamepad1 = new Joystick(Joystick1_Port);
-    
-    Joystick gamepad2 = new Joystick(Joystick2_Port);
+    Joystick gamepad1 = new Joystick(Joystick1_Port),
+        gamepad2 = new Joystick(Joystick2_Port);
     
     //CREATING BUTTONS
-    Button btnA = new JoystickButton(gamepad1, 1);
-    Button btnB = new JoystickButton(gamepad1, 2);
-    Button btnX = new JoystickButton(gamepad1, 3);
-    Button btnY = new JoystickButton(gamepad1, 4);
+    Button btnA = new JoystickButton(gamepad1, 1),
+        btnB = new JoystickButton(gamepad1, 2),
+        btnX = new JoystickButton(gamepad1, 3),
+        btnY = new JoystickButton(gamepad1, 4);
    
-    /*
-    All the actual button and axis methods.
-    */
+    //CREATE OTHER VARS
+    double deadZone = 0.2;
+    Command driveCommand = new StrafeArcadeCommand();
     
-    //CREATE THE AXIS METHODS
-    public double get1LsY() {
-        return gamepad1.getRawAxis(LsY);
+    //Commands triggered by buttons in teleop.   
+    public OI(){
+        //Trigger commands with buttons.
+        btnA.whenPressed(new shootFrisbeeCommand());
+        
+        //Trigger commands with joysticks.
+        if(Math.abs(gamepad1.getRawAxis(LsY)) > deadZone || Math.abs(gamepad1.getRawAxis(LsX)) > deadZone || Math.abs(gamepad1.getRawAxis(RsX)) > deadZone){
+            
+            driveCommand.start();
+        } else {
+            driveCommand.cancel();
+        }
+        
     }
     
-    public double get1LsX() {
+    //Methods to return joystick values for only the used joysticks.
+    public double Joy1LsX(){
         return gamepad1.getRawAxis(LsX);
     }
     
-    public double get1RsX() {
+    public double Joy1LsY(){
+        return gamepad1.getRawAxis(LsY);
+    }
+    
+    public double Joy1RsX(){
         return gamepad1.getRawAxis(RsX);
     }
-    
-    public double get2LsY() {
-        return gamepad2.getRawAxis(LsY);
-    }
-    
-    public double get2LsX() {
-        return gamepad2.getRawAxis(LsX);
-    }
-    
-    public double get2RsX() {
-        return gamepad2.getRawAxis(RsX);
-    }
-    
-    public boolean get1BtnA() {
-        return btnA.get();
-    }
-    
-    public boolean get1BtnB() {
-        return btnB.get();
-    }
-    
-    public boolean get1BtnX() {
-        return btnX.get();
-    }
-    
-    public boolean get1BtnY() {
-        return btnY.get();
-    }
-    
    
     //// CREATING BUTTONS
     // One type of button is a joystick button which is any button on a joystick.

@@ -4,6 +4,8 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.robot.OI;
 import edu.wpi.first.wpilibj.robot.subsystems.DriveTrain;
+import edu.wpi.first.wpilibj.robot.subsystems.Sensors;
+import edu.wpi.first.wpilibj.robot.subsystems.frisbeeShooter;
 
 /**
  * The base for all commands. All atomic commands should subclass CommandBase.
@@ -12,7 +14,9 @@ import edu.wpi.first.wpilibj.robot.subsystems.DriveTrain;
  * @author Author
  */
 public abstract class CommandBase extends Command {
-
+    public static DriveTrain driveSS = new DriveTrain();
+    public static frisbeeShooter frisbeeSS = new frisbeeShooter();
+    public static Sensors sensorSS = new Sensors();
 
     public static void init() {
         // This MUST be here. If the OI creates Commands (which it very likely

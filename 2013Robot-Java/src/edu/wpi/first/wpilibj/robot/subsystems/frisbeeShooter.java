@@ -9,7 +9,7 @@ package edu.wpi.first.wpilibj.robot.subsystems;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.robot.RobotMap;
 import edu.wpi.first.wpilibj.Talon;
-import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 /**
@@ -23,8 +23,8 @@ public class frisbeeShooter extends Subsystem {
     Talon shooterMotor = new Talon(RobotMap.ShooterWheel);
     
     //Create other pneumatic objects.
-    Compressor airComp = new Compressor(12,8);
-    DoubleSolenoid shootPush = new DoubleSolenoid(1,2);
+    Relay airCompressor = new Relay(8);
+    
     
     //All the other crap.
     public double error;
@@ -41,11 +41,7 @@ public class frisbeeShooter extends Subsystem {
     public void stopDriving(){
         shooterMotor.set(0);
     }
-    
-    public double getShooterSpeed(){
-        return shooterMotor.get();
-    }
-    
+        
     public void spinTo(double targetRate, double encoderRate){
         error = targetRate - encoderRate;
         if(error > 5000){
@@ -58,34 +54,8 @@ public class frisbeeShooter extends Subsystem {
             shooterMotor.set(-0.1);
         }
     }
+     
     
-    public double returnShooterError(){
-        return error;
-    }
-    
-    public void startCompressor(){
-        airComp.start();
-    }
-    
-    public void stopCompressor(){
-        airComp.stop();
-    }
-    
-    public boolean getCompValue(){
-        return airComp.getPressureSwitchValue();
-    }
-    
-    public void pushOutShooter(){
-        shootPush.set(DoubleSolenoid.Value.kForward);
-    }
-    
-    public void pushInShooter(){
-        shootPush.set(DoubleSolenoid.Value.kReverse);
-    }
-    
-    public void pushStop(){
-        shootPush.set(DoubleSolenoid.Value.kOff);
-    }
     
         
 }
